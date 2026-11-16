@@ -2182,6 +2182,7 @@ describe('plugin registration and config', () => {
     ['fileExpiresAfterSeconds', 2_592_001, /fileExpiresAfterSeconds must be an integer from 3600 through 2592000/],
     ['fileRefreshMarginSeconds', -1, /fileRefreshMarginSeconds must be a non-negative integer/],
     ['fileRefreshMarginSeconds', 604_800, /fileRefreshMarginSeconds must be a non-negative integer/],
+    ['fileExpiresAfterSeconds', 3_600, /fileRefreshMarginSeconds must be a non-negative integer below fileExpiresAfterSeconds/],
     ['fileQuotaCleanupBatch', 0, /fileQuotaCleanupBatch must be an integer from 1 through 1000/],
     ['fileQuotaCleanupBatch', 1_001, /fileQuotaCleanupBatch must be an integer from 1 through 1000/],
   ] as const)('rejects %s=%s', (field, value, message) => {

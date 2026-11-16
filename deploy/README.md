@@ -12,7 +12,7 @@ dsh --profile web --patch deploy/internal-privacy.patch.yml
 dsh --profile headless --patch deploy/internal-privacy.patch.yml "task"
 ```
 
-To make it permanent for one installation, copy the file into the profile's own layer at `$DSH_HOME/profiles/<name>/cordis.patch.yml` (append the same rows; the profile layer applies after every bundle).
+To make it permanent for one installation, copy the file into the profile's own layer at `$DSH_HOME/profiles/<name>/cordis.patch.yml` (append the same rows; the profile layer applies after every bundle). Note the Web Settings switch for session-log upload writes through the profile layer, so in a permanent setup it can switch `dsh_session_log` back on — re-apply the overlay or edit the profile patch to keep it off.
 
 ## What it disables
 
