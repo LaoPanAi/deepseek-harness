@@ -33,7 +33,7 @@ DeepSeek Harness 为每个 harness home 使用一个匿名标识符，以关联�
 
 - **会话遥测**——你的遥测导出会以 `user.id` Resource 属性携带该 id，采集器因此可以按安装分组记录。
 - **反馈**——每条反馈确认都会标明记录该反馈的匿名安装。
-- **DeepSeek 请求**——每次提供方请求都会携带 `x-deepseek-harness-user-id` 标头，因此可以按安装归因用量。
+- **DeepSeek 请求**——每次提供方请求都会携带 `x-deepseek-harness-user-id` 标头，因此可以按安装归因用量。在 DeepSeek provider 配置行设置 `sendAnonymousUserId: false` 可省略该标头。
 
 ### 查看与重置 id
 

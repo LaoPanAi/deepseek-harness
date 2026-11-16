@@ -22,3 +22,5 @@ export const DEFAULT_FILE_REFRESH_MARGIN_SECONDS = 60 * 60
 export const DEFAULT_FILE_QUOTA_CLEANUP_BATCH = 100
 /** Default deadline for resolving one request image through the Files API. */
 export const DEFAULT_FILES_API_TIMEOUT_MS = 20_000
+/** Default for sending the harness-home anonymous id as `x-deepseek-harness-user-id`. */
+export const DEFAULT_SEND_ANONYMOUS_USER_ID = true

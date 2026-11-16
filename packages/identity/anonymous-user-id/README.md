@@ -33,7 +33,7 @@ Three things your installation sends out carry the same id, so records line up a
 
 - **Session telemetry** — your telemetry exports carry the id as the `user.id` resource attribute, so a collector can group an installation's records.
 - **Feedback** — each feedback acknowledgement names the anonymous installation that recorded it.
-- **DeepSeek requests** — every provider request carries the `x-deepseek-harness-user-id` header, so usage can be attributed per installation.
+- **DeepSeek requests** — every provider request carries the `x-deepseek-harness-user-id` header, so usage can be attributed per installation. Set `sendAnonymousUserId: false` on the DeepSeek provider rows to omit the header.
 
 ### Observing and resetting the id
 

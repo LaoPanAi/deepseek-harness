@@ -79,6 +79,8 @@ export interface DeepSeekConnectionOptions {
   filePolicy: DeepSeekFilePolicy
   /** Provider-owned model-request retry policy, already resolved. */
   retryPolicy: ResolvedRetryPolicy
+  /** Whether model requests carry the `x-deepseek-harness-user-id` header. */
+  sendAnonymousUserId: boolean
 }
 
 /** Authentication captured by the provider for one request and its file operations. */

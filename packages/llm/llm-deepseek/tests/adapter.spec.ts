@@ -165,6 +165,15 @@ describe('direct Messages HTTP', () => {
     expect(llm.imageRequestPricing('deepseek-official', MODEL)).toBeDefined()
   })
 
+  it('omits the anonymous user id header when sendAnonymousUserId is false', async () => {
+    const http = await endpoint()
+    const llm = adapter({ baseURL: http.url, sendAnonymousUserId: false })
+    await assemble(llm.stream(options({ model: 'deepseek-flash' })), 'deepseek-flash')
+    expect(http.requests[0]?.headers['x-deepseek-harness-user-id']).toBeUndefined()
+    expect(http.requests[0]?.headers['x-deepseek-harness-session-id']).toBeUndefined()
+    expect(http.requests[0]?.headers['user-agent']).toEqual(expect.stringContaining('deepseek-harness/'))
+  })
+
   it.each([
     ['https://provider.example', 'https://provider.example/v1/messages'],
     ['https://provider.example/v1/', 'https://provider.example/v1/messages'],

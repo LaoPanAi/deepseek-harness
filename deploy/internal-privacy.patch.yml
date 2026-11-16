@@ -1,0 +1,74 @@
+# Internal privacy-hardened overlay for DeepSeek Harness.
+# Launch with: dsh --profile <profile> --patch deploy/internal-privacy.patch.yml
+#
+# Every row below targets a base-bundle row by id and replaces its whole
+# config; the last write wins, so this overlay has the final say over the
+# shipped defaults. It turns off every outbound channel that carries
+# session content, installation identity, or plugin inventory:
+#
+# 1. dsh_session_log  - the canonical session-log suffix attached to
+#    official DeepSeek model requests (default on; carries cwd, prompts,
+#    full conversation, tool arguments/results).
+# 2. dsh_plugin_packages - active plugin package names/versions attached
+#    to the same requests.
+# 3. OTel session telemetry - only explicit user feedback is ever uploaded
+#    (FEEDBACK_ONLY); DISABLED stops even that, and no collector endpoint
+#    is configured.
+# 4. x-deepseek-harness-user-id - the stable per-install anonymous UUID
+#    sent on every authorized model request (sendAnonymousUserId: false).
+# 5. Files API image upload - shortened retention for uploaded images.
+# 6. DeepSeek web_search provider - search queries no longer leave for
+#    the DeepSeek Search API; local anonymous fetch stays available.
+
+# 1. Never attach the session log to model requests.
+- id: session-log-deepseek
+  name: '@deepseek-ai/dsh-session-log-deepseek'
+  config:
+    enabled: false
+    maxBytes: 8388608
+
+# 2. Never list the active plugin packages to the provider.
+- id: plugin-package-inventory-deepseek
+  name: '@deepseek-ai/dsh-plugin-package-inventory-deepseek'
+  config:
+    enabled: false
+
+# 3. No telemetry upload of any kind; no collector endpoint configured.
+- id: session-telemetry-otel
+  name: '@deepseek-ai/dsh-session-telemetry-otel'
+  config:
+    mode: DISABLED
+    shutdownTimeoutMillis: 3000
+    maxRequestBytes: 4000000
+
+# 4+5. Do not send the stable anonymous install id with model requests, and
+# shorten Files API retention of uploaded images to one hour (provider
+# minimum). Each provider row restates its complete config because a patch
+# replaces the whole row config rather than merging.
+- id: llm-deepseek
+  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+  config:
+    sendAnonymousUserId: false
+    fileExpiresAfterSeconds: 3600
+
+- id: llm-deepseek-account
+  name: '@deepseek-ai/dsh-llm-deepseek-account'
+  config:
+    sendAnonymousUserId: false
+    fileExpiresAfterSeconds: 3600
+
+# 6. Unmount the DeepSeek Search API providers so web_search cannot send
+# queries to DeepSeek, and clear the configured searchProvider (the base
+# bundle pins deepseek-search-api); the local anonymous http fetch stays.
+- id: web-search-deepseek
+  name: '@deepseek-ai/dsh-web-search-deepseek'
+  disabled: true
+
+- id: web-deepseek-api
+  name: '@deepseek-ai/dsh-web-deepseek-api'
+  disabled: true
+
+- id: web
+  name: '@deepseek-ai/dsh-web'
+  config:
+    fetchProvider: http
